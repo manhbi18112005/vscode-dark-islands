@@ -9,7 +9,7 @@ echo "🏝️  Islands Dark Theme Bootstrap Installer"
 echo "=========================================="
 echo ""
 
-REPO_URL="https://github.com/bwya77/vscode-dark-islands.git"
+REPO_URL="https://github.com/manhbi18112005/vscode-dark-islands.git"
 INSTALL_DIR="$HOME/.islands-dark-temp"
 
 # Detect OS
