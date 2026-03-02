@@ -131,9 +131,29 @@ if [ -f "$SETTINGS_FILE" ]; then
     echo "   You can restore your old settings from this file if needed."
 fi
 
-# Copy Islands Dark settings
-cp "$SCRIPT_DIR/settings.json" "$SETTINGS_FILE"
-echo -e "${GREEN}✓ Islands Dark settings applied${NC}"
+# Apply Islands Dark settings
+if [ -f "$SETTINGS_FILE" ] && command -v jq >/dev/null 2>&1; then
+    # Merge existing settings with Islands Dark settings using jq
+    # Existing user settings are preserved; Islands Dark keys override where necessary.
+    if jq empty "$SETTINGS_FILE" >/dev/null 2>&1; then
+        if jq -s '.[0] * .[1]' "$SETTINGS_FILE" "$SCRIPT_DIR/settings.json" > "$SETTINGS_FILE.tmp"; then
+            mv "$SETTINGS_FILE.tmp" "$SETTINGS_FILE"
+            echo -e "${GREEN}✓ Islands Dark settings merged with existing Antigravity settings${NC}"
+        else
+            echo -e "${RED}✗ Failed to merge settings with jq; falling back to full overwrite.${NC}"
+            cp "$SCRIPT_DIR/settings.json" "$SETTINGS_FILE"
+            echo -e "${GREEN}✓ Islands Dark settings applied (existing settings overwritten)${NC}"
+        fi
+    else
+        echo -e "${YELLOW}⚠️  Existing settings.json is not valid JSON; overwriting with Islands Dark settings.${NC}"
+        cp "$SCRIPT_DIR/settings.json" "$SETTINGS_FILE"
+        echo -e "${GREEN}✓ Islands Dark settings applied (existing settings overwritten)${NC}"
+    fi
+else
+    # No existing settings or jq not available; behave as original script and overwrite.
+    cp "$SCRIPT_DIR/settings.json" "$SETTINGS_FILE"
+    echo -e "${GREEN}✓ Islands Dark settings applied${NC}"
+fi
 
 echo ""
 echo "🚀 Step 5: Enabling Custom UI Style..."
