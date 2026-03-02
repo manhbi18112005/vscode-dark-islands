@@ -9,7 +9,7 @@ echo "🏝️  Islands Dark Theme Bootstrap Installer"
 echo "=========================================="
 echo ""
 
-$RepoUrl = "https://github.com/bwya77/vscode-dark-islands.git"
+$RepoUrl = "https://github.com/manhbi18112005/vscode-dark-islands.git"
 $Branch = "main"
 $InstallDir = "$env:TEMP\islands-dark-temp"
 
